@@ -1,3 +1,7 @@
+install:
+	uv sync
+	uv export --format requirements-txt --no-hashes > requirements.txt
+
 run:
 	uv run uvicorn app.main:app --reload
 
