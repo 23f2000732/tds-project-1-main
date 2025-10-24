@@ -1,3 +1,5 @@
+import re
+import uuid
 from fastapi import FastAPI, Request, BackgroundTasks
 import os
 import json
@@ -49,9 +51,13 @@ def process_request(data):
     saved_attachments = decode_attachments(attachments)
     print("Attachments saved:", saved_attachments)
 
+    safe_task_id = re.sub(r"[^a-z-]", "-", task_id.lower())[:10]
+    random_seed = uuid.uuid4().hex[:6]
+    safe_task_id += random_seed
+
     # Step 1: Get or create repo
     repo = create_repo(
-        task_id, description=f"Auto-generated app for task: {data['brief']}"
+        safe_task_id, description="TDS-PA1-auto-generated-repo"+random_seed
     )
 
     # Optional: fetch previous README for round 2
